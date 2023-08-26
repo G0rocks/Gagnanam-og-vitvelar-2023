@@ -22,7 +22,8 @@ x_i4 is petal width in centimeters
 from typing import Union
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import tree
 
 from tools import load_iris, split_train_test
 
@@ -35,15 +36,16 @@ def prior(targets: np.ndarray, classes: list) -> np.ndarray:
     # Count how many times each class appears in the targets
     classes_frequency = []
     n_targets = len(targets)
-    # For each class, count number of occurences
-    for i in range(len(classes)):
-        frequency = 0
-        # Count occurences
-        for j in range(len(targets)):
-            if targets[j] == classes[i]:
-                frequency = frequency+1
-        # Add number of occurences to classes_frequency
-        classes_frequency.append(frequency/n_targets)
+    if n_targets > 0:
+        # For each class, count number of occurences
+        for i in range(len(classes)):
+            frequency = 0
+            # Count occurences
+            for j in range(len(targets)):
+                if targets[j] == classes[i]:
+                    frequency = frequency+1
+            # Add number of occurences to classes_frequency
+            classes_frequency.append(frequency/n_targets)
 
     return classes_frequency
 
@@ -128,7 +130,6 @@ def brute_best_split(
     Return the lowest gini impurity, the feature dimension and
     the threshold
     '''
-    
     best_gini, best_dim, best_theta = float("inf"), None, None
 
     # iterate feature dimensions
@@ -136,11 +137,9 @@ def brute_best_split(
         # create the thresholds
         min_value = features[split_feature_index].min()
         max_value = features[split_feature_index].max()
-        print("min value: " + str(min_value))
-        print("max value: " + str(max_value))
-        thetas = np.linspace(min_value, max_value, num_tries)[1:-1]
-        print("Thetas array:")
-        print(thetas)
+        thetas = np.linspace(min_value, max_value, num_tries + 2)[1:-1]
+        #print("Thetas array:")
+        #print(thetas)
 
         # iterate thresholds
         for theta in thetas:
@@ -150,9 +149,9 @@ def brute_best_split(
                     best_gini = gini_impurity
                     best_dim = split_feature_index
                     best_theta = theta
-            except:
-                ...
-                #print("Attempting brute best split, fail.\nFeature index " + str(split_feature_index) + "\nTheta: " + str(theta))
+            except Exception as e:
+                print(e)
+                print("Feature index: " + str(split_feature_index) + " - Theta: " + str(theta))
 
     return best_gini, best_dim, best_theta
 
@@ -177,24 +176,95 @@ class IrisTreeTrainer:
         self.tree = DecisionTreeClassifier()
 
     def train(self):
-        ...
+        '''
+        Train the data tree model, using the features, targets and classes
+        '''
+        self.tree.fit(self.train_features, self.train_targets)
 
     def accuracy(self):
-        ...
+        '''
+        Checks the accuracy of the decision tree using the test data.
+        Returns None if self.test_targets contains no data.
+        '''
+        # for test_feature in self.test_features:
+        predicted_targets = self.tree.predict(self.test_features)
+        num_test_targets = len(self.test_targets)
+        if num_test_targets == 0:
+            return None
+        accuracy = 0
+        for i in range(num_test_targets):
+            if predicted_targets[i] == self.test_targets[i]:
+                accuracy = accuracy + 1
+
+        return accuracy/num_test_targets
+
 
     def plot(self):
-        ...
+        '''
+        Plot decision tree
+        '''
+        plt.clf()
+        tree.plot_tree(self.tree)
+        
 
     def plot_progress(self):
+        '''
+        Plots the accuracy on the test set as a function of training samples.
+        Starts by training on only one sample and end on training on all the training samples
+        '''
         # Independent section
         # Remove this method if you don't go for independent section.
-        ...
+        print("Plotting accuracy progress")
+
+        # Find number of training samples
+        max_training_samples = len(self.train_features)
+
+        n_train_samples = list(range(max_training_samples))
+
+        accuracy = np.zeros(max_training_samples)
+
+        # Measure progress
+        for i in range(max_training_samples):
+            # Make subset of training samples - Possible improvement, make subset a random subset from training samples
+            subset_train_samples = self.train_features[0:i+1]
+            subset_train_targets = self.train_targets[0:i+1]
+
+            # Train tree with samples
+            self.tree.fit(subset_train_samples, subset_train_targets)
+
+            # Check accuracy for subset of training samples
+            accuracy[i] = self.accuracy()
+                
+        # Plot accuracy as a function of sample number
+        plt.clf()
+        plt.plot(n_train_samples, accuracy)
+
+
+
+        
 
     def guess(self):
-        ...
+        '''
+        Returns the predictions on the test data
+        '''
+        return self.tree.predict(self.test_features)
 
     def confusion_matrix(self):
-        ...
+        '''
+        Returns the confusion matrix for the test data
+        '''
+        n_classes = len(self.classes)
+
+        # Initialize empty confusion matrix
+        confusion_matrix = np.zeros((n_classes, n_classes))
+
+        guesses = self.guess()
+
+        # Go through the predicted values and check how correct they are, add to confusion matrix as we go
+        for i in range(len(guesses)):
+            confusion_matrix[guesses[i]][self.test_targets[i]] = confusion_matrix[guesses[i]][self.test_targets[i]] + 1
+
+        return confusion_matrix
 
 
 
@@ -256,6 +326,30 @@ if __name__ == '__main__':
     else:
         print("Fail")
 
-    # Part 2.1
+    # Part 2 test:
+    dt = IrisTreeTrainer(features, targets, classes=classes)
+    dt.train()
+    print(f'The accuracy is: {dt.accuracy()}')
+
+    # Part 2.3
+    dt.plot()
+    plt.savefig("./01_decision_trees/images/2_3_1.png")
+
+    # Part 2.4
+    print("Part 2.4")
+    print(f'I guessed:\n {dt.guess()}')
+    print(f'The true targets are:\n {dt.test_targets}')
+
+    # Part 2.5
+    print("Part 2.5")
+    print(dt.confusion_matrix())
+
+
+    # Independent part
+    print("Independent part")
+    dt = IrisTreeTrainer(features, targets, classes=classes, train_ratio=0.6)
+    dt.plot_progress()
+    plt.savefig("01_decision_trees/images/indep_1.png")
+
 
     print("Run succesful")
