@@ -59,6 +59,7 @@ def split_data(
     Split a dataset and targets into two seperate datasets
     where data with split_feature < theta goes to 1 otherwise 2
     '''
+    # Create completely empty lists to add to later
     features_1 = []
     targets_1 = []
     features_2 = []
