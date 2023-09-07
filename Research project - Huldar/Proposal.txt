@@ -1,0 +1,51 @@
+Huldar research project proposal:
+1. Research subject
+The subject I'm going to study is the quality of bus stops for 4 popular bus routes in the capital region
+in Iceland with classification. Where quality will be a measure of how timely the bus routes for that bus stop is.
+This is based off the possibility that I will get real bus data from Strætó (https://straeto.is/) which Strætó seems
+very positive about. I have emailed them about the project idea and they said they could give me real data from 1 year of
+runtime which is around 11 GB of data.
+In case the bus data project doesn't pan out I can always fall back to kaggle.com and find something
+like this https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data?select=GlobalTemperatures.csv)
+And use that data to make predictions on the temperature in Reykjavík in the years 2024-2100 for example.
+
+We want to make an algorithm that can take information about bus stops (location, number of stop from end of route, how many buses
+can stop in the bus bulb (ísl. útskot) if there is one) along with information about the timetable and time of year to classify the bus stop and estimate
+the departure time the bus will be for that specific bus stop. The actual bus departure time from the bus stop can be used to facilitate
+supervised learning. Using this information we will create a simple bus stop quality rating (e.g. from 1-5) and have the algorithm rate
+each bus stop so that Strætó can know which bus stop time tables are the ones that need the most attendance and which ones are working great.
+
+
+2. Research paper
+To find the paper we first need to choose an algorithm. Looking at https://mlforall.files.wordpress.com/2019/09/machinelearningalgorithms.png
+After looking at a couple of them an interesting one is the radial basis function (RBF) neural network which is:
+ - Easy to design
+ - Good at generalizing
+ - Fast at training
+ - Simple (only 1 hidden layer)
+ - Very tolerant to input noise
+ - Easily interpretable. The meaning of each function in each node (since there is only 1 layer)
+According to https://www.simplilearn.com/tutorials/machine-learning-tutorial/what-are-radial-basis-functions-neural-networks
+
+
+I'm looking at this paper https://www.sciencedirect.com/science/article/pii/S0893608097000026
+and want to implement a radial basis function (RBF) neural network algorithm. The paper talks about an efficient method for constructing
+RBF neural networks.
+Also found this paper https://www.sciencedirect.com/science/article/pii/S0895717706002639 which could be interesting.
+
+
+3. Research data
+The paper used a dataset with images of handwritten digits extracted from the zip codes on US mail envelopes but I hope to use a dataset containing
+the trip data (location, bus stop time stamps, etc.) of 2-4 bus routes in Reykjavík for a whole year. I have requested this
+data from Strætó and they are excited about the project and eager to help.
+They said they would give us the data for routes 1, 2, 3 and 6 in an appropriate format on the 4th of september but we have not heard from them since.
+If the data has not been delivered by the 12th of september we will contact them again about this.
+
+
+4. Research group
+For this project me, Arnar and Ragnar have decided to work with the same data and the same problem but using different algorithms
+to solve that problem. In the end our hope is that we can compare our results and maybe see something interesting. We hope that this is okay
+even though the research project is an individual assignment and not a group assignment. In the case that this violates the assignment
+please let us know so we can respond accordingly and change our method according to your feedback.
+In order to be able to compare our results we will use the same method for quality rating bus stops, the same goal (bus stop quality classification) and
+the same input data (data and format). We might work with the data from Strætó to accomodate our needs in this respect.
