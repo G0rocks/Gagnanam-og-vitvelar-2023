@@ -1,6 +1,6 @@
-# Author: 
-# Date:
-# Project: 
+# Author:   Huldar
+# Date:     2023-09-12
+# Project:  Assignment 3
 # Acknowledgements: 
 #
 
