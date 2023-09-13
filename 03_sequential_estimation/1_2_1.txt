@@ -1,0 +1,5 @@
+Do you expect the batch estimate to be exactly (0,1,-1)?
+Yes. I do, because that's what we generated it as.
+
+Which two parameters can be used to make this estimate more accurate? I have no clue, really don't understand the statistics I'm doing right now
+https://m.media-amazon.com/images/I/41sKf2ToyPL.jpg
