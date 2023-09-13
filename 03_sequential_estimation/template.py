@@ -10,6 +10,8 @@ from tools import scatter_3d_data, bar_per_axis
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Use same random seed as professor
+np.random.seed(1234)
 
 def gen_data(
     n: int,
@@ -18,9 +20,20 @@ def gen_data(
     var: float
 ) -> np.ndarray:
     '''Generate n values samples from the k-variate
-    normal distribution
+    normal distribution.
+    n: Number of vectors
+    k: Dimension of each vector
+    mean:   Mean for K-variate normal distribution
+    var:    variance for K-variate normal distribution
+
+    Returns nxK array X of vectors x_i
     '''
-    pass
+    # Generate index matrix
+    variance_index_matrix = [[var, 0], [0, var]]
+
+    X_array = np.random.multivariate_normal(mean, variance_index_matrix, size=(n,k))
+    # Return X_array
+    return X_array
 
 
 def update_sequence_mean(
@@ -72,3 +85,45 @@ def gen_changing_data(
 def _plot_changing_sequence_estimate():
     # remove this if you don't go for the independent section
     pass
+
+
+
+# Test area
+# -----------------------------------------------------
+if __name__ == '__main__':
+    # Part 1.1
+    print("Part 1.1")
+    if gen_data(2, 3, np.array([0, 1, -1]), 1.3) == np.array([[ 0.61286571, -0.5482684 ,  0.86251906],
+ [-0.40644746,  0.06323465,  0.15331182]]):
+        print("Pass")
+    else:
+        print("Fail")
+
+
+
+    # Part 1.2
+    print("Part 1.2")
+    
+
+    # Part 1.3
+    print("Part 1.3")
+    
+    # Part 1.4
+    print("Part 1.4")
+
+    # Part 1.5
+    print("Part 1.5")
+
+    # Part 1.6
+    print("Part 1.6")
+
+
+    # Confirmation message for a succesful run
+    print("\n---------------------------------------------------------------\nRun succesful :)\n")
+
+'''
+    if == :
+        print("Pass")
+    else:
+        print("Fail")
+'''
