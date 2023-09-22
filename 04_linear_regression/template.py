@@ -1,6 +1,6 @@
-# Author: 
-# Date:
-# Project: 
+# Author:           Huldar
+# Date:             2023-09-13
+# Project:          Assignment 4
 # Acknowledgements: 
 #
 
@@ -32,10 +32,23 @@ def mvn_basis(
     * sigma: All normal distributions are isotropic with sigma*I covariance
     matrices (where I is the MxM identity matrix)
     Output:
-    * fi - [NxM] is the basis function vectors containing a basis function
+    * phi - [NxM] is the basis function vectors containing a basis function
     output fi for each data vector x in features
+
+    Returns phi
     '''
-    pass
+    # Get dimensions
+    N, D = features.shape
+    M = mu.shape[0]
+    phi = np.zeros(N, M)
+
+    # Find each phi vector, put into phi
+
+    # Use gaussian basis function formula to find phi vectors
+    #phi_k(x) = \frac{1}{(2\pi)^{D/2}} \frac{1}{|\Sigma_k|^{1/2}} e^{-\frac{1}{2} (x-\mu_k)^T \Sigma_k^{-1} (x-\mu_k)}
+
+    # Return phi
+    return phi
 
 
 def _plot_mvn():
@@ -79,3 +92,50 @@ def linear_model(
     Output: [Nx1] The prediction for each data vector in features
     '''
     pass
+
+# Test area
+#---------------------------------------------------------------------------
+# Remember to comment this area out
+
+if __name__ == '__main__':
+    # Initialize data
+    X, t = load_regression_iris()   # X = flower features, t = flower petal length
+    N, D = X.shape
+
+    # Part 1.1
+    print("Part 1.1")
+
+    M, sigma = 10, 10
+    mu = np.zeros((M, D))
+    for i in range(D):
+        mmin = np.min(X[i, :])
+        mmax = np.max(X[i, :])
+        mu[:, i] = np.linspace(mmin, mmax, M)
+    fi = mvn_basis(X, mu, sigma)
+
+    # Part 1.2
+    print("Part 1.2")
+
+    # Part 1.3
+    print("Part 1.3")
+
+
+    # Part 1.4
+    print("Part 1.4")
+
+
+    # Part 1.5
+    print("Part 1.5")
+
+
+
+
+    # Confirmation message for a succesful run
+    print("\n---------------------------------------------------------------\nRun succesful :)\n")
+
+'''
+    if == :
+        print("Pass")
+    else:
+        print("Fail")
+'''
