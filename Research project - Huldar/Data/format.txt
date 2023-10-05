@@ -1,0 +1,34 @@
+þetta etu NL-termineraðar textalínur með eftirfarandi format:
+
+<id>:<formatversion>;<device>;<ferill>;<gpstime>;<gpslat>;N;<gpslon>;W;<knots>;<heading>;<gpsfix>;<prevstop>;<nextstop>;<leið>;<reason>;<id2>*<check>~<internalfields>
+
+t.d.:
+4297131243:$3;0036;6-A;230101080933;6407.425010;N;02147.36625;W;0.00;315.54;2;;90000469;6;6;4297131243*75~0,-1,0,0,0
+
+<id> (4297131243) er raðnúmer færslu
+<formatversion ($3). allar þessar færslur ættu að vera $3
+<device> (0036) er er númer GPStækis, má líta á þetta sem vagna-id
+<ferill> (6-A) skilgreinir ferðir tiltekins vagns fyrir daginn. venjulega er aðeins 1 vagn á sama ferli á sama tíma nema þegar vagnar fyllast og þarf að senda aukavagn eða þegar vagn bilar og vagninum skipt út
+<gpstime> (230101080933) er timestamp eins og það kemur frá GPSbúnaði, á formynu YYMMDDhhmmss
+<gpslat> (6407.425010) er breiggargráða frá GPSbúnaði á forminu GGmm.mmmm þar sem GG er gráður og mm.mmmm er mínútur (ath breytilegur fjöldi aukastafa)
+<gpslon> (02147.36625) er lengdargráða frá GPSbúnaði á forminu GGGmm.mmmm þar sem GGG er gráður og mm.mmmm er mínútur (ath breytilegur fjöldi aukastafa)
+<knot> (0.00) er hraði í hnútum eins og það kemur frá GPSbúnaði
+<heading> (315.54) er akstursstefna í gráðum frá GPSbúnaði 0=N 90=A
+<gpsfix> (2) segir til um gæði GPSmerkis 0=ógilt 1=lélegt 2=gott
+<prevstop> () aíðasta stöðvarnúmer sem vagninn fór um
+<nextstop> (90000469) næsta stöðvanúmer sem vagn á að fara um
+<leið> (6)
+<reason> (6) tilefni gagnaskeytisins. algengast er reason 6 (timeout) en möguleikar eru:
+	 2: vagna stöðvast
+	 3: vagn leggur á stað
+	 4: slökkt er á vél vagnsins. skeyti koma á 2ja mínútna fresti í þessu ástandi
+	 5: kveykt var á vél vagnsins
+	 6: timeout 
+	 7: vagn kominn á stöð
+<id2> er <id> endurtekið
+<check> er checksumma
+<internalfields> eru svið til innri nota hjá okkur sem gagnast ykkur líklega lítið
+
+
+
+
