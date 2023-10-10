@@ -64,7 +64,7 @@ def rate_1_bus_stop(n_stop: int, mean_time: float, std_dev_time: float, early_pe
     mean_time:      Mean difference between actual departure time and planned departure time according to time table
     std_dev_time:   Standard deviation of the mean difference between actual and planned departure time
     early_percent:  Percentage of departures from this stop which were at least 1 minute earlier than the planned departure time
-    Leid_type:      0 for long distance & high speed, 1 for short distance & low speed
+    leid_type:      0 for long distance & high speed, 1 for short distance & low speed
 
     Output:
     stop_rating:    Integer. Rating from 0-4. This is what the rating means:
@@ -73,8 +73,55 @@ def rate_1_bus_stop(n_stop: int, mean_time: float, std_dev_time: float, early_pe
         2: It could be worse but it could be better. This bus stop should get attention and analysis but the priority is lower than that of lower ratings.
         3: Good enough :) This bus stop is performing as it should, with the occasional mishap. It could do better but it's pointless to analyse bus stops with this rating unless you have already dealt with all other bus stops with lower ratings
         4: Excellent rating! It would take a miracel to have this bus stop performing any better than it is ^_^
+
+    Notes:
+        - We have higher expectations of leidir with leid_type 0 and lower expectations for leidir with leid_type 1
     '''
-    pass
+    # If the bus leaves early a lot of the time (6 times out of every 300 times or more) then the stop_rating goes to
+    if early_percent >= 0.02:
+        stop_rating = 0
+        if leid_type:
+            stop_rating = stop_rating + 1
+        
+        return stop_rating
+    if early_percent >= 0.01:
+        stop_rating = 1
+        if leid_type:
+            stop_rating = stop_rating + 1
+        
+        return stop_rating
+    if early_percent > 0:
+        stop_rating = 2
+
+    # High expectations of leidir with leid_type 0, lower expectations for leidir with leid_type 1
+    if leid_type:
+        stop_rating = stop_rating + 1
+
+    # If the bus is late a lot, reduce stop_rating
+    if mean_time > 5:
+        stop_rating = stop_rating - 2
+    elif mean_time > 3:
+        stop_rating = stop_rating - 1
+    
+    # If the standard deviation is low, increase stop_rating
+    if std_dev_time < 3:
+        stop_rating = stop_rating + 1
+    if std_dev_time < 2:
+        stop_rating = stop_rating + 1
+    if std_dev_time < 1:
+        stop_rating = stop_rating + 1
+    
+    # As the number of stops grows, we become more relaxed when it comes to leaving precisely on time
+    if n_stop > 15:
+        stop_rating = stop_rating + 1
+    
+    if stop_rating < 0:
+        stop_rating = 0
+    if stop_rating > 4:
+        stop_rating = 4
+
+    # Return stop_rating
+    return stop_rating
 
 def rate_bus_stops(dynamic_stop_data: dict) -> dict:
     '''
