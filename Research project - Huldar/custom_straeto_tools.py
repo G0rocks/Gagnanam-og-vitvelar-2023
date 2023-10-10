@@ -237,8 +237,7 @@ def rate_bus_stops_in_leid(leid_dynamic_stop_data: numpy.array) -> numpy.array:
         leid_type       =   leid_dynamic_stop_data[i][4]
         n_stop          =   leid_dynamic_stop_data[i][5]
 
-        stop_ratings[i][0] = n_stop
-        stop_ratings[i][1] = rate_1_bus_stop(n_stops, mean_time, std_dev_time, early_percent, leid_type, n_stop)
+        stop_ratings[i] = rate_1_bus_stop(n_stops, mean_time, std_dev_time, early_percent, leid_type, n_stop)
 
     # Return stop_ratings
     return stop_ratings
@@ -252,8 +251,7 @@ def rate_bus_stops(dynamic_stop_data: dict) -> dict:
 
     Output:
     leidir_ratings: dictionary where the key is the name of the leid and the value is a 2D array with these values:
-        stops[i][0]: Number of stop
-        stops[i][1]: Stop rating (value from 0 to 4 both included)
+        stops[i]: Stop rating (value from 0 to 4 both included)
     '''
     # Initialize empty dictionary
     leidir_ratings = dict()
