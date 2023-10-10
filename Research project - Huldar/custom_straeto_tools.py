@@ -225,7 +225,7 @@ def rate_bus_stops_in_leid(leid_dynamic_stop_data: numpy.array) -> numpy.array:
     n_stops = leid_dynamic_stop_data.shape[0]
 
     # Create empty array without ratings
-    stop_ratings = numpy.zeros([n_stops, 2])
+    stop_ratings = numpy.zeros([n_stops, 1])
 
     # Loop through each stop and rate it
     for i in range(n_stops):
@@ -258,13 +258,13 @@ def rate_bus_stops(dynamic_stop_data: dict) -> dict:
 
     # Get list of leidir (keys):
     leidir = list(dynamic_stop_data.keys())
-    print("Leidir: " + str(leidir))
+    print("Rating bus stops with dynamic data in leidir: " + str(leidir))
 
     # For each leid, rate all bus stops
     for i in range(len(leidir)):
         # Add rating to dictionary
         print("Rating " + str(dynamic_stop_data.get(leidir[i]).shape[0]) + " bus stops for leid " + str(leidir[i]) + " with dynamic data")
         leidir_ratings[leidir[i]] = rate_bus_stops_in_leid(dynamic_stop_data.get(leidir[i]))
-        
+
     # Return leidir_ratings
     return leidir_ratings
