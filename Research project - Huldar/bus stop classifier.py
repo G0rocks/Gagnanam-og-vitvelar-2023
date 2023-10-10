@@ -18,14 +18,25 @@ import os                               # To check and get data from other files
 #if os.path.exists("busstop./file.txt")
 
 # Generate data
-bus_stops_static_data = straeto_generate_labeled_data.generate_bus_stop_static_data()
-bus_stops_dynamic_data = straeto_generate_labeled_data.generate_bus_stop_dynamic_data()
-#print(bus_stops_data.get(1))
-
-# Split data into training set and testing set depending on number of bus stops
-train_set, test_set = custom_straeto_tools.split_data(bus_stops_static_data, bus_stops_dynamic_data)
+bus_stops_static_data = straeto_generate_labeled_data.generate_bus_stop_static_data()   # Features
+bus_stops_dynamic_data = straeto_generate_labeled_data.generate_bus_stop_dynamic_data(bus_stops_static_data)    # Only used for rating!!!
 
 # Get targets for train_set and test_set
+bus_stop_ratings = custom_straeto_tools.rate_bus_stops(bus_stops_dynamic_data)  # Stop ratings
+
+# Split data into training set and testing set depending on number of bus stops. Use features and targets
+train_features, test_features, train_targets, test_targets = custom_straeto_tools.split_data(bus_stops_static_data, bus_stop_ratings)
+
+print("Train features keys:")
+print(list(train_features.keys()))
+print("test features keys:")
+print(list(test_features.keys()))
+print("Train targets keys:")
+print(list(train_targets.keys()))
+print("test targets keys:")
+print(list(test_targets.keys()))
+
+#train_targets = custom_straeto_tools.rate_leidir(train_set)
 
 # Loop through a couple of different RDBFNN with different number of hidden layer nodes.
 # Create radial basis function neural network
