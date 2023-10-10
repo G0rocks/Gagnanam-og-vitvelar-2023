@@ -2,6 +2,8 @@
 1. Merkja stoppistöðvarnar með gæðaeinkun með því að nota raungögn. Nota áreiðanleika strætó á hverju stoppi til að merkja stoppistöðina.
 2. Gera radial basis function neural network (RBFNN) sem lærir á stoppistöðvarnar út frá gögnum án raunáreiðanleika sem spáir fyrir um áreiðanleika stöðvar. 
 
+GERA FYRST SKREF 2 OG SVO SKREF 1!!!!!!!
+
 # 1. Til að merkja gögnin
 Förum í gegnum allar stoppistöðvar á þeim leiðum sem við erum með og athugum hversu seint strætó fer frá stöð.
 Skref 1:	Sækja leiðir sem við erum að skoða, slegið inn handvirkt.
@@ -21,6 +23,7 @@ Skref 6:	Aukaskref, teikna upp stöplarit fyrir hverja leið þar sem einkunn hv
 -----------------------------------------------------------------------------------------------------------------------
 Úr ÁÁÁÁMM skjölunum. Dæmi https://data02.straeto.is/data/raw/202301. Hægt að sjá á https://data02.straeto.is/data/raw/.
 <formatversion>	($3). allar þessar færslur ættu að vera $3
+<leið>		(6) Hvaða leið er verið að aka.
 <ferill>	(6-A) skilgreinir ferðir tiltekins vagns fyrir daginn. venjulega er aðeins 1 vagn á sama ferli á sama tíma nema þegar vagnar fyllast og þarf að senda aukavagn eða þegar vagn bilar og vagninum skipt út
 <gpstime>	(230101080933) er timestamp eins og það kemur frá GPSbúnaði, á forminu YYMMDDhhmmss
 <gpslat>	(6407.425010) er breiggargráða frá GPSbúnaði á forminu GGmm.mmmm þar sem GG er gráður og mm.mmmm er mínútur (ath breytilegur fjöldi aukastafa)
@@ -28,14 +31,13 @@ Skref 6:	Aukaskref, teikna upp stöplarit fyrir hverja leið þar sem einkunn hv
 <gpsfix>	(2) segir til um gæði GPSmerkis 0=ógilt 1=lélegt 2=gott
 <prevstop>	() síðasta stöðvarnúmer sem vagninn fór um
 <nextstop>	(90000469) næsta stöðvanúmer sem vagn á að fara um
-<leið>		(6)
 <reason>	(6) tilefni gagnaskeytisins. algengast er reason 6 (timeout) en möguleikar eru:
-	 	2: vagn stöðvast
-	 	3: vagn leggur á stað
-	 	4: slökkt er á vél vagnsins. skeyti koma á 2ja mínútna fresti í þessu ástandi
-	 	5: kveikt var á vél vagnsins
-	 	6: timeout 
-	 	7: vagn kominn á stöð
+		 	2: vagn stöðvast
+		 	3: vagn leggur á stað
+		 	4: slökkt er á vél vagnsins. skeyti koma á 2ja mínútna fresti í þessu ástandi
+		 	5: kveikt var á vél vagnsins
+		 	6: timeout 
+		 	7: vagn kominn á stöð
 
 Úr timatoflur json skránum, finnast hér: https://data02.straeto.is/data/gtfs/timatoflur/json/
 
@@ -49,27 +51,30 @@ Skref 6:	Aukaskref, teikna upp stöplarit fyrir hverja leið þar sem einkunn hv
 ### Búið til sjálf:
 -----------------------------------------------------------------------------------------------------------------------
 <leidir>		([1 2 3]) Listi af leiðum sem við erum að skoða
-<stoppistodvar_leida>	(Hashmap/dictionary) key: Númer leiðar. Value: Listi með stoppistöðvum leiðar í réttri röð 
+<stoppistodvar_leida>	(Hashmap/dictionary) key: Númer leiðar. Value: Listi með stoppistöðvum leiðar í réttri röð, stoppistod er líka listi.
+<stoppistod>	(classi) Inniheldur eiginleika
 <brottfor_min> (2) Hversu mörgum mínútum frá áætluðum brottfarartíma vagninnn fer frá stoppistöð. Möguleikar:
 				(-1): Fór 1 mínútu snemma
 				(0): Fór á réttum tíma frá stoppistöð
 				(1): Fór 1 mínútu of snemma
 				(n): Fór n mínútum of snemma
+<brottfor_min_medaltal>	(2.35789) Hversu mörgum mínútum frá áætluðum brottfarartíma vagninn fer frá stoppistöð að meðaltali
+<brottfor_min_stadalfravik>	(5.8937) Staðalfrávik áætlaðs brottfarartíma vagns frá stoppistöð.
 <bulb_space>	(1) Fjöldi strætóa sem getur stoppað í útskoti við þessa stoppistöð án þess að trufla umferðina.
-		(0): Ekkert útskot
-		(1): Útskot með plássi fyrir einn strætó
-		(2): Útskot með plássi fyrir tvo strætóa
-		(n): Útskot með plássi fyrir n strætóa
+				(0): Ekkert útskot
+				(1): Útskot með plássi fyrir einn strætó
+				(2): Útskot með plássi fyrir tvo strætóa
+				(n): Útskot með plássi fyrir n strætóa
 <tengingar>	(1) Fjöldi leiða sem stoppa á þessu stoppi. Telur líka leiðir sem stoppa hinu megin við götuna eða t.d. í Hamraborg þ.s. strætóar stoppa á mismunandi stöðum en allt á sama svæðinu þá telja allar leiðirnar.
 
 ## Output classes:
 -----------------------------------------------------------------------------------------------------------------------
-<stop_quality>	(0) Gæðastimpill stoppistöðvar. Möguleikarnir eru:
-		(0): Glötuð stoppistöð - Þarfnast tafarlausrar athugunar og aðgerða
-		(1): Slæm stoppistöð - Þarfnast athugunar og aðgerða
-		(2): Ekki slæm stoppistöð - Þarfnast athugunar
-		(3): Ásættanleg stoppistöð - Er í lagi en gæti verið áreiðanlegri
-		(4): Stoppistöð í toppstandi - Þetta er mjög áreiðanleg stoppistöð. Strætó mun sennilega aldrei fara of snemma og fara
+<stop_quality>	(4) Gæðastimpill stoppistöðvar. Möguleikarnir eru:
+				(0): Glötuð stoppistöð - Þarfnast tafarlausrar athugunar og aðgerða
+				(1): Slæm stoppistöð - Þarfnast athugunar og aðgerða
+				(2): Ekki slæm stoppistöð - Þarfnast athugunar
+				(3): Ásættanleg stoppistöð - Er í lagi en gæti verið áreiðanlegri
+				(4): Stoppistöð í toppstandi - Þetta er mjög áreiðanleg stoppistöð. Strætó mun sennilega aldrei fara of snemma og fara
 
 
 # 2. Spá fyrir um áreiðanleika stoppistöðvar
@@ -77,7 +82,7 @@ Skref 6:	Aukaskref, teikna upp stöplarit fyrir hverja leið þar sem einkunn hv
 ## Input features:
 ### Frá strætó:
 -----------------------------------------------------------------------------------------------------------------------
-Úr 
+Úr ÁÁÁÁMM skjölunum. Dæmi https://data02.straeto.is/data/raw/202301. Hægt að sjá á https://data02.straeto.is/data/raw/.
 <leið>		(6) Hvaða leið strætó við erum að skoða. Athugið að sama stoppistöðin getur fengið mismunandi einkunnir eftir því hvaða leið er verið að skoða.
 <ferill>	(6-A) skilgreinir ferðir tiltekins vagns fyrir daginn. venjulega er aðeins 1 vagn á sama ferli á sama tíma nema þegar vagnar fyllast og þarf að senda aukavagn eða þegar vagn bilar og vagninum skipt út
 <prevstop>	() síðasta stöðvarnúmer sem vagninn fór um

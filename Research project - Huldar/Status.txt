@@ -1,0 +1,13 @@
+Status 2023-10-08 22:47
+
+I have read the paper about radial basis function neural networks and I have made a code that gives me data.
+Note, the code does not use the data from strætó, I need more time to work out that data but the code generates
+somewhat random data.
+
+After talking with Jón I have shifted my mindset, I was really focused on doing step 1 first and then step 2,
+where the steps are:
+1. Make the data be in the way we need.
+2. Create RBFNN
+But Jón helped me realise to do focus on step 2 first and then on step 1 (if I have time)
+
+- Huldar
