@@ -10,6 +10,7 @@ on the rest. Returns results.
 # Import necessary modules
 import straeto_generate_labeled_data    # To generate labeled bus stop data
 import custom_straeto_tools             # To use custom straeto tools
+import RBFNN_HI                         # To create and work with radial basis function neural networks
 import os                               # To check and get data from other files
 
 
@@ -27,25 +28,15 @@ bus_stop_ratings = custom_straeto_tools.rate_bus_stops(bus_stops_dynamic_data)  
 # Split data into training set and testing set depending on number of bus stops. Use features and targets
 train_features, test_features, train_targets, test_targets = custom_straeto_tools.split_data(bus_stops_static_data, bus_stop_ratings)
 
-print("Train features keys:")
-print(list(train_features.keys()))
-print("test features keys:")
-print(list(test_features.keys()))
-print("Train targets keys:")
-print(list(train_targets.keys()))
-print("test targets keys:")
-print(list(test_targets.keys()))
-
-#train_targets = custom_straeto_tools.rate_leidir(train_set)
 
 # Loop through a couple of different RDBFNN with different number of hidden layer nodes.
 # Create radial basis function neural network
-
+rbfnn = RBFNN_HI.RBFNN(n_nodes=10)
 
 # Train RBFNN on training set
 
 
-# Test RBFNN on test set, measure accuracy and log accuracy
+# Test RBFNN on test set, measure and log accuracy, time to train
 
 
 

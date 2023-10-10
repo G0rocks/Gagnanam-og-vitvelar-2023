@@ -83,7 +83,7 @@ def generate_bus_stop_dynamic_data(static_stop_data: dict) -> dict:
             stops[j][2] = std_dev_departure # Standard deviation of the mean difference between actual and planned departure time
             stops[j][3] = early_percent # Percentage of departures from this stop which were at least 1 minute earlier than the planned departure time
             stops[j][4] = leid_type # leid_type. 0 for long distance & high speed, 1 for short distance & low speed
-            stops[j][5] = j         # Number of this stop
+            stops[j][5] = j+1         # Number of this stop
 
         # Add stops array to leid in dynamic_data
         dynamic_stop_data[leidir[i]] = stops

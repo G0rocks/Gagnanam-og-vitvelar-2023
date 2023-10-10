@@ -92,10 +92,10 @@ def split_data(static_stop_data: dict, leidir_bus_stop_ratings: dict, test_data_
     test_data_fraction: float, defaults to 0.5. How much percentage (from 0 to 1) of the leidir in the data should be in the test features.
 
     Outputs:
-    train_features
-    test_features
-    train_targets
-    test_targets
+    train_features: Numpy array with data
+    test_features:  Numpy array with data
+    train_targets:  Numpy array with data
+    test_targets:   Numpy array with data
     '''
     print("Splitting data into training and test data sets")
     # Make sure test_data_fraction is good
@@ -110,23 +110,31 @@ def split_data(static_stop_data: dict, leidir_bus_stop_ratings: dict, test_data_
     # Get list of which leidir will be used for training and which for testing
     train_leidir, test_leidir = get_split_leidir(leidir, test_data_fraction)
 
-    # Create features and targets
-    train_features = dict()
-    test_features = dict()
-    train_targets = dict()
-    test_targets = dict()
+    # If fewer than 2 train_leidir or test_leidir, set the features and targets to contain the data from them
+    if len(train_leidir) == 1:
+        train_features = static_stop_data.get(train_leidir[0])
+        train_targets = leidir_bus_stop_ratings.get(train_leidir[0])
 
-    # Loop through all training leidir and add them to their dictionary
-    for i in range(len(train_leidir)):
-        print("Adding leid " + str(train_leidir[i]) + " to training sets")
-        train_features[train_leidir[i]] = static_stop_data.get(train_leidir[i])
-        train_targets[train_leidir[i]] = leidir_bus_stop_ratings.get(train_leidir[i])
+    if len(test_leidir) == 1:
+        test_features = static_stop_data.get(test_leidir[0])
+        test_targets = leidir_bus_stop_ratings.get(test_leidir[0])
 
-    # Loop through all testing leidir and add them to their dictionary
-    for i in range(len(test_leidir)):
-        print("Adding leid " + str(test_leidir[i]) + " to testing sets")
-        test_features[test_leidir[i]] = static_stop_data.get(test_leidir[i])
-        test_targets[test_leidir[i]] = leidir_bus_stop_ratings.get(test_leidir[i])
+    # Loop through train leidir and concatenate the data
+    print("Adding leid " + str(train_leidir[0]) + " to training features and targets")
+    train_features = static_stop_data.get(train_leidir[0])
+    train_targets = leidir_bus_stop_ratings.get(train_leidir[0])
+    for i in range(1, len(train_leidir)):
+        print("Adding leid " + str(train_leidir[i]) + " to training features and targets")
+        train_features = numpy.concatenate((train_features, static_stop_data.get(train_leidir[i])), axis=0)
+        train_targets = numpy.concatenate((train_targets, leidir_bus_stop_ratings.get(train_leidir[i])), axis=0)
+
+    print("Adding leid " + str(test_leidir[0]) + " to testing features and targets")
+    test_features = static_stop_data.get(test_leidir[0])
+    test_targets = leidir_bus_stop_ratings.get(test_leidir[0])
+    for i in range(1, len(test_leidir)):
+        print("Adding leid " + str(test_leidir[i]) + " to testing features and targets")
+        test_features = numpy.concatenate((test_features, static_stop_data.get(test_leidir[i])), axis=0)
+        test_targets = numpy.concatenate((test_targets, leidir_bus_stop_ratings.get(test_leidir[i])), axis=0)
 
     # Return train and test features and targets
     print("Data split complete")    
@@ -262,4 +270,3 @@ def rate_bus_stops(dynamic_stop_data: dict) -> dict:
         
     # Return leidir_ratings
     return leidir_ratings
-
