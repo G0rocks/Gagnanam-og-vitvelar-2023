@@ -1,3 +1,19 @@
+Status 2023-10-11 09:41
+
+Yesterday I did some work on the project. Finished generating some pseudo-data and started on the RBFNN module
+RBFNN = Radial basis function neural network
+
+I finished
+bus stop classifier.py
+
+But I need to fix up things in the RBFNN_HI.py file still.
+Going to work on that today. Though I do understand the algorithm better now. Made the breakthrough in
+understanding that the algorithm is about putting up clusters and the radial basis is just checking if the
+data point is close to those cluster centers. Way simpler now in my mind at least.
+
+ - Huldar
+
+-----------------------------------------------------------------------------------------------------
 Status 2023-10-08 22:47
 
 I have read the paper about radial basis function neural networks and I have made a code that gives me data.
