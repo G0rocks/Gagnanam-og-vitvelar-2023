@@ -39,10 +39,9 @@ def get_stops_from_leid(leid):
     # Put values in stops
     for i in range(0,n_stops):
         stops[i][0] = int(i+1)  # Number of stop on the way
-        stops[i][1] = int(i*17+3)   # Stop ID
-        stops[i][2] = (i-1)/(n_stops-1) # Percentage of stop (stop number/total number of stops on route)
-        stops[i][3] = random.randint(0,2)   # Bulb space (how many buses can stop at this bus stop without interfering with other traffic)
-        stops[i][4] = leid_type             # Leid type, 0 if it's a high speed & longer distance leid, 1 if it's a lower speed and shorter distane leid.
+        stops[i][1] = (i-1)/(n_stops-1) # Percentage of stop (stop number/total number of stops on route)
+        stops[i][2] = random.randint(0,2)   # Bulb space (how many buses can stop at this bus stop without interfering with other traffic)
+        stops[i][3] = leid_type             # Leid type, 0 if it's a high speed & longer distance leid, 1 if it's a lower speed and shorter distane leid.
 
     return stops
 
