@@ -31,17 +31,28 @@ train_features, test_features, train_targets, test_targets = custom_straeto_tool
 
 
 # Loop through a couple of different RDBFNN with different number of hidden layer neurons.
-n_neurons_to_check = [1, 3, 5]
+n_neurons_to_check = [10, 30]
+# alphas_to_check = [1]
 rbfnn_list = []
 print("Initializing RBFNNs (radial basis function neural network) with neuron numbers " + str(n_neurons_to_check))
 for i in range(len(n_neurons_to_check)):
     # Create radial basis function neural network
-    rbfnn_list.append(RBFNN_HI.RBFNN(n_neurons=n_neurons_to_check[i]))
+    rbfnn_list.append(RBFNN_HI.RBFNN(n_neurons=n_neurons_to_check[i], cluster_scale_factor_alpha=1.1))
 
 # Train RBFNN on training set
 print("Training RBFNNs")
 for rbfnn in rbfnn_list:
     rbfnn.train(train_features, train_targets)
+
+# Test random classification on test set, measure and log accuracy, time to train
+print("Testing random classification")
+rand_accuracies = []
+for rbfnn in rbfnn_list:
+    rbfnn.test_random(test_features, test_targets)
+    # Collect accuracies
+    rand_accuracies.append(rbfnn.accuracy)
+    print("Random test accuracy: " + str(rbfnn.accuracy))
+
 
 # Test RBFNN on test set, measure and log accuracy, time to train
 print("Testing RBFNNs")
@@ -56,8 +67,7 @@ for rbfnn in rbfnn_list:
 # Plot the accuracy as a function of number of neurons
 print("Plotting accuracies as a function of number of neurons in the RBFNNs")
 matplotlib.pyplot.plot(n_neurons_to_check, accuracies)
-#matplotlib.pyplot.show()
-
+matplotlib.pyplot.show()
 
 
 

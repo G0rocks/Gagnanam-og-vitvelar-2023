@@ -24,10 +24,9 @@ def generate_bus_stop_static_data(leidir=[1,2,3,6]) -> dict:
     Output: Dictionary where the keys are the number of the route.
         Each value in the dictionary is a 2D numpy array where the first index (i) is the number of the stop for this route and the second index is by this list:
             stops[i][0]: Number of stop on the way
-            stops[i][1]: Stop ID
-            stops[i][2]: Percentage of stop (stop number/total number of stops on route)
-            stops[i][3]: Bulb space (how many buses can stop at this bus stop without interfering with other traffic)
-            Stops[i][4]: Leid type, 0 if it's a high speed & longer distance leid, 1 if it's a lower speed and shorter distane leid.
+            stops[i][1]: Percentage of stop (stop number/total number of stops on route)
+            stops[i][2]: Bulb space (how many buses can stop at this bus stop without interfering with other traffic)
+            Stops[i][3]: Leid type, 0 if it's a high speed & longer distance leid, 1 if it's a lower speed and shorter distane leid.
     '''
     print("Generating static bus stop data")
 
